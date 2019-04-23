@@ -48,7 +48,7 @@
   list-style: none;
 }
 .nav1 p{
-  font-family: "futura", futura, mono;
+  font-family: "futura pt";
   font-size: 15px;
   display: flex;
   flex-direction: row;
