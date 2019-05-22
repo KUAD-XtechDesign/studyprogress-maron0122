@@ -11,20 +11,235 @@
     </header>
     <main>
       <h3>成果</h3>
+      <h3>
+        <p>
+          P
+        </p>
+      </h3>
+      <p>
+        # write "P"
+# 必要なモジュールのインポート
+import socket
+import threading
+import time
+import sys
+
+# telloのIPアドレスとポート
+tello_address = ('192.168.10.1', 8889)
+
+# ローカルコンピュータのIPアドレスとポート
+local_address = ('', 9000)
+
+# コマンドを送るためのUDP接続のの実体化
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+# ローカルアドレスとポートのバインディング
+sock.bind(local_address)
+
+# telloへのコマンドの送信とディレイタイム（秒）生成関数
+def send(message, delay):
+    # 例外が表示されなかった場合，telloにエンコードされたコマンドを送信する
+    try:
+        sock.sendto(message.encode(), tello_address)
+        print("Sending message: " + message)
+    except Exception as e:
+        print("Error sending: " + str(e))
+
+    # ユーザーが定義した移動待ち時間（秒
+    time.sleep(delay)
+
+# telloからのメッセージ受信関数
+def receive():
+    # telloからのメッセージ受信を常態化
+    while True:
+        # 例外が表示されなかった場合，受信状態を保つ
+        try:
+            response, ip_address = sock.recvfrom(128)
+            print("Received message: " + response.decode(encoding='utf-8'))
+        except Exception as e:
+            # もしエラー検出された場合，ソケットを閉じ，ループを終了する
+            sock.close()
+            print("Error receiving: " + str(e))
+            break
+
+
+# シークエンス関数
+def sequence():
+    # ここにシークエンスを書き込む. 引数は2つで第一引数は"コマンド 移動距離（cm）”，第二引数はディレイタイム
+#############################################################################################
+    send("go 0 0 250 100", 4)
+    send("go 0 60 0 100", 4)
+    send("go 0 20 -20 100", 4)
+    send("go 0 20 -25 100", 4)
+    send("go 0 0 -30 100", 4)
+    send("go 0 -20 -25 100", 4)
+    send("go 0 -20 -20 100", 4)
+    send("go 0 -60 0 100", 4)
+
+#############################################################################################
+    # ここまでは追記・削除おk．あとはいじらないこと!
+
+
+# ここからがメインの実行処理
+# バックグラウンド実行されるスレッドを作り，スタートする
+# これはreceive関数を利用して，telloから送信されたメッセージを常態的に受信する
+receiveThread = threading.Thread(target=receive)
+receiveThread.daemon = True
+receiveThread.start()
+
+# telloをコマンドモードにセット
+send("command", 3)
+# 離陸コマンドの送信
+send("takeoff", 5)
+
+# ユーザーのコマンド入力のヘルプを表示
+print('Type in a Tello SDK command and press the enter key. Enter "start" to start sequence. Enter "quit" to exit this program.')
+
+# ユーザーが”quit”もしくは"start"をタイプするか，ctrl+cを押すまで，コマンド入力待ちをループ実行する
+while True:
+
+    try:
+        # ユーザーのキーボード入力を読み込み
+        message = input('')
+        # もしユーザーが”quit”を入力したら，ソケットを閉じアプリケーション終了
+        if 'quit' in message:
+            # Land
+            send("land", 5)
+            print("Program exited sucessfully")
+            sock.close()
+            break
+        # もしユーザーが”start”を入力したら，シークエンス開始
+        elif 'start' in message:
+            sequence()
+            message = ''
+
+        # telloにコマンドを送信
+        send(message, 3)
+
+    # ctrl+cの入力があった場合の制御
+    except KeyboardInterrupt as e:
+        send("land", 5)
+        sock.close()
+        break
+      </p>
+
+      <h3>
+        <p>
+          Z
+        </p>
+      </h3>
+      <p>
+        # write "Z"
+# 必要なモジュールのインポート
+import socket
+import threading
+import time
+import sys
+
+# telloのIPアドレスとポート
+tello_address = ('192.168.10.1', 8889)
+
+# ローカルコンピュータのIPアドレスとポート
+local_address = ('', 9000)
+
+# コマンドを送るためのUDP接続のの実体化
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+# ローカルアドレスとポートのバインディング
+sock.bind(local_address)
+
+# telloへのコマンドの送信とディレイタイム（秒）生成関数
+def send(message, delay):
+    # 例外が表示されなかった場合，telloにエンコードされたコマンドを送信する
+    try:
+        sock.sendto(message.encode(), tello_address)
+        print("Sending message: " + message)
+    except Exception as e:
+        print("Error sending: " + str(e))
+
+    # ユーザーが定義した移動待ち時間（秒
+    time.sleep(delay)
+
+# telloからのメッセージ受信関数
+def receive():
+    # telloからのメッセージ受信を常態化
+    while True:
+        # 例外が表示されなかった場合，受信状態を保つ
+        try:
+            response, ip_address = sock.recvfrom(128)
+            print("Received message: " + response.decode(encoding='utf-8'))
+        except Exception as e:
+            # もしエラー検出された場合，ソケットを閉じ，ループを終了する
+            sock.close()
+            print("Error receiving: " + str(e))
+            break
+
+
+# シークエンス関数
+def sequence():
+    # ここにシークエンスを書き込む. 引数は2つで第一引数は"コマンド 移動距離（cm）”，第二引数はディレイタイム
+#############################################################################################
+    send("go 0 -180 0 100", 6)
+    send("go 0 180 190 100", 6)
+    send("go 0 -180 0 100", 6)
+
+#############################################################################################
+    # ここまでは追記・削除おk．あとはいじらないこと!
+
+
+# ここからがメインの実行処理
+# バックグラウンド実行されるスレッドを作り，スタートする
+# これはreceive関数を利用して，telloから送信されたメッセージを常態的に受信する
+receiveThread = threading.Thread(target=receive)
+receiveThread.daemon = True
+receiveThread.start()
+
+# telloをコマンドモードにセット
+send("command", 3)
+# 離陸コマンドの送信
+send("takeoff", 5)
+
+# ユーザーのコマンド入力のヘルプを表示
+print('Type in a Tello SDK command and press the enter key. Enter "start" to start sequence. Enter "quit" to exit this program.')
+
+# ユーザーが”quit”もしくは"start"をタイプするか，ctrl+cを押すまで，コマンド入力待ちをループ実行する
+while True:
+
+    try:
+        # ユーザーのキーボード入力を読み込み
+        message = input('')
+        # もしユーザーが”quit”を入力したら，ソケットを閉じアプリケーション終了
+        if 'quit' in message:
+            # Land
+            send("land", 5)
+            print("Program exited sucessfully")
+            sock.close()
+            break
+        # もしユーザーが”start”を入力したら，シークエンス開始
+        elif 'start' in message:
+            sequence()
+            message = ''
+
+        # telloにコマンドを送信
+        send(message, 3)
+
+    # ctrl+cの入力があった場合の制御
+    except KeyboardInterrupt as e:
+        send("land", 5)
+        sock.close()
+        break
+
+      </p>
       <iframe src="" width="600" height="450"></iframe>
-      <p>こんなことにになりました。</p>
+      <p></p>
       <h3>学習進捗</h3>
       <p>
-        これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。
-        <br>あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。
-      </p>
-      <p>
-        これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。
-        <br>あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。
-      </p>
-      <p>
-        これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。
-        <br>あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。これをやった。あれをやった。それをやった。あれこれやった。
+        <br>難しそうな＜P＞から挑戦した。
+        <br>曲面ということで＜go＞コマンドを利用したが、最初x,y,z座標のみで試したところ動作せず、それに加えて速度の情報が必要だった。
+        <br>はじめに直面した問題は曲面をどう出すかで、最初は細かい値で座標を出して挑戦してみたが、おそらくドローンの許容値が20-500cmの間だったこともあり、うまく動作しなかった。
+        <br>その後少し数値を大まかに取り、20cm以上の数値で調整をすることでしっかりと動くようになった。
+        <br>次に＜Z＞のコードを書いたのだが、一度コードを入れて動作させるとうまくうまく動かず、ログを見てみるとしっかりとコードが読まれていなかったため、ディレイをデフォルトの4から6まで伸ばすことで、対処することができた。
+
       </p>
     </main>
     <footer>
